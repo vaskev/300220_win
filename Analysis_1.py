@@ -40,7 +40,8 @@ def debug_tiedosto():
     dataRaw_pandas.to_csv(tyohakemisto+"/data_from_calc.txt", sep=';')
 
 """
-Haetaan max piikin arvo 
+1. Lasketaan antenni yms korjaukset
+2. Haetaan max piikin arvo ja kohta 
 """
 def laske_max():
     global dataRaw_arr
@@ -52,13 +53,21 @@ def laske_max():
     global pointer_v
     global max_value_index
 
+    AF_taulukko = pd.read_csv('AF_table.csv', delimiter=';')  # taulukko jossa antenna gain
+
     dataRaw_arr = data_raw.values
     max_value_index= data_raw.idxmax(0)  # tää hakee piikin arvon data_raw:sta eikä dataRaw_arr:sta. En muista miksi
     freq =dataRaw_arr[:,0]
     values=dataRaw_arr[:,1]
 
+    for slot in AF_taulukko:
+        freq_low = AF_taulukko.FREQ[slot]
+        freq_high = AF_taulukko.FREQ[slot+1]
+        gain_tekija = AF_taulukko.FREQ[slot]
+        for line in freq:
+           if freq_low <= line <= freq_high:
 
-
+       TÄHÄN JÄI KESKEN
 
     pointer_f = freq[max_value_index[1]]
     pointer_v = values[max_value_index[1]]
@@ -86,16 +95,13 @@ def piirra():
     kuvaaja.text(0.5,-0.1,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes)
     plt.show()
 
-
-
 """
 PÄÄOHJELMA
 """
 
-
 hae_data()
 laske_max()
-piirra()
-debug_tiedosto()
+#piirra()
+#debug_tiedosto()
 
 print('DONE')
