@@ -11,6 +11,10 @@
 # six	1.12.0	1.12.0
 #
 
+# Tää ohjelma perustuu kiinteän mittaiseen (350) taulukkoon jossa antennin ja kaapelin gain on jaettu 20Mhz kaistoihin välillä 0 ...7000Mhz
+#totetus ei ole kovin Python
+
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -39,12 +43,14 @@ def debug_tiedosto():
     dataRaw_pandas=pd.DataFrame(dataRaw_arr)
     dataRaw_pandas.to_csv(tyohakemisto+"/data_from_calc.txt", sep=';')
 
+
 """
 1. Lasketaan antenni yms korjaukset
 2. Haetaan max piikin arvo ja kohta 
 """
 def laske_max():
     global dataRaw_arr
+    dataCorr_arr = np.full([1000,2],-1.00)
     global freq
     global values
     global freq_r
@@ -53,21 +59,34 @@ def laske_max():
     global pointer_v
     global max_value_index
 
-    AF_taulukko = pd.read_csv('AF_table.csv', delimiter=';')  # taulukko jossa antenna gain
+    AF_taulukko = pd.read_csv('AF_table.csv', delimiter=';')  # taulukko jossa antenna / cable gain
+    dataRaw_arr = data_raw.values # tälle pandas varoitus että käytä pandas.DataFrame.to_numpy .values sijaan
 
-    dataRaw_arr = data_raw.values
-    max_value_index= data_raw.idxmax(0)  # tää hakee piikin arvon data_raw:sta eikä dataRaw_arr:sta. En muista miksi
-    freq =dataRaw_arr[:,0]
-    values=dataRaw_arr[:,1]
+    max_value_index= data_raw.idxmax(0)  # KORJAA OSOITTAMAAN korjattua taulukkoa
 
-    for slot in AF_taulukko:
-        freq_low = AF_taulukko.FREQ[slot]
-        freq_high = AF_taulukko.FREQ[slot+1]
-        gain_tekija = AF_taulukko.FREQ[slot]
-        for line in freq:
-           if freq_low <= line <= freq_high:
 
-       TÄHÄN JÄI KESKEN
+    for slot in range(350):  # tää olettaa että AF taulukossa 350 osaa. Ei kovin Python toteutus
+        freq_low = AF_taulukko.FREQ[slot] # antenna / cable gain on jaettu osiin slot joille jokaiselle lasketaan korjaus
+        freq_high = AF_taulukko.FREQ[slot+1] # tämä on slotin ylätaajuus
+        gain_tekija = AF_taulukko.dBi[slot]
+        dataCorr_point =0       # käytetään osoittimena kun kasataan arvokorjattu taulukko uudestaan
+        for line in dataRaw_arr:
+           if freq_low <= line[0] <= freq_high:  # line[0] viittaa taajuuteen line[1] on taasen mitattu arvo
+               #print(slot)
+               #print('LOW '+ str(freq_low))
+               #print('line '+str(line))
+               #print('dBi '+str(gain_tekija))
+               #print('korjattu '+ str(line[1]+gain_tekija))
+               #print('HIGH '+str(freq_high))
+               #print('  ')
+               dataCorr_arr[dataCorr_point] = [line[0],line[1]+gain_tekija]
+               dataCorr_point = dataCorr_point+1
+
+    #print(dataCorr_arr)
+    freq = dataCorr_arr[:,0]
+    values = dataCorr_arr[:,1]
+    dataCorr_pandas=pd.DataFrame(dataRaw_arr)
+    dataCorr_pandas.to_csv(tyohakemisto+"/dataCorr.txt", sep=';')
 
     pointer_f = freq[max_value_index[1]]
     pointer_v = values[max_value_index[1]]
@@ -101,7 +120,7 @@ PÄÄOHJELMA
 
 hae_data()
 laske_max()
-#piirra()
+piirra()
 #debug_tiedosto()
 
 print('DONE')
