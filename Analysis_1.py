@@ -51,6 +51,7 @@ def debug_tiedosto():
 def laske_max():
     global dataRaw_arr
     dataCorr_arr = np.full([1000,2],-1.00)
+    #dataCorr_arr = np.array(1000,2,'f')
     global freq
     global values
     global freq_r
@@ -69,7 +70,7 @@ def laske_max():
         freq_low = AF_taulukko.FREQ[slot] # antenna / cable gain on jaettu osiin slot joille jokaiselle lasketaan korjaus
         freq_high = AF_taulukko.FREQ[slot+1] # tämä on slotin ylätaajuus
         gain_tekija = AF_taulukko.dBi[slot]
-        dataCorr_point =0       # käytetään osoittimena kun kasataan arvokorjattu taulukko uudestaan
+        dataCorr_osoittaja =0       # käytetään osoittimena kun kasataan arvokorjattu taulukko uudestaan
         for line in dataRaw_arr:
            if freq_low <= line[0] <= freq_high:  # line[0] viittaa taajuuteen line[1] on taasen mitattu arvo
                #print(slot)
@@ -79,13 +80,13 @@ def laske_max():
                #print('korjattu '+ str(line[1]+gain_tekija))
                #print('HIGH '+str(freq_high))
                #print('  ')
-               dataCorr_arr[dataCorr_point] = [line[0],line[1]+gain_tekija]
-               dataCorr_point = dataCorr_point+1
+               #dataCorr_arr[dataCorr_osoittaja] = [line[0],line[1]+gain_tekija]
+               dataCorr_osoittaja = dataCorr_osoittaja+1
 
     #print(dataCorr_arr)
     freq = dataCorr_arr[:,0]
     values = dataCorr_arr[:,1]
-    dataCorr_pandas=pd.DataFrame(dataRaw_arr)
+    dataCorr_pandas=pd.DataFrame(dataCorr_arr)
     dataCorr_pandas.to_csv(tyohakemisto+"/dataCorr.txt", sep=';')
 
     pointer_f = freq[max_value_index[1]]
