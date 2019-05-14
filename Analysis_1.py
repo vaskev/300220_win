@@ -80,7 +80,7 @@ def laske_max():
                #print('korjattu '+ str(line[1]+gain_tekija))
                #print('HIGH '+str(freq_high))
                #print('  ')
-               #dataCorr_arr[dataCorr_osoittaja] = [line[0],line[1]+gain_tekija]
+               dataCorr_arr[dataCorr_osoittaja] = [line[0],line[1]+gain_tekija]
                dataCorr_osoittaja = dataCorr_osoittaja+1
 
     #print(dataCorr_arr)
