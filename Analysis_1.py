@@ -63,8 +63,8 @@ def laske_max(datacorr_array):
 
     dataRaw_temp = pd.DataFrame(values)
     max_value_index = dataRaw_temp.idxmax(0)
-    freq_r  = np.around( freq[max_value_index], decimals=3)
-    value_r = np.around( values[max_value_index], decimals=3)
+    freq_r  = np.round( freq[max_value_index[0]], decimals=3)
+    value_r = np.round( values[max_value_index[0]], decimals=2)
     pointer_f = freq[max_value_index]
     pointer_v = values[max_value_index]
 
@@ -76,7 +76,7 @@ def piirra():
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
-    teksti = str(freq_r)+"MHz ,"+str(value_r)
+    teksti = str(freq_r)+"MHz ,"+str(value_r)+' dBi'
     kuvaaja.annotate(teksti,
                      xy=(pointer_f,pointer_v  ),
                      xytext = (pointer_f +5 ,pointer_v +5),
