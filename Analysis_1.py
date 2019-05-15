@@ -17,6 +17,7 @@
 
 import pandas as pd
 import matplotlib.pyplot as plt
+import AF_C_correlation
 import numpy as np
 
 tyohakemisto = 'c:/300220_data/'
@@ -48,52 +49,24 @@ def debug_tiedosto():
 1. Lasketaan antenni yms korjaukset
 2. Haetaan max piikin arvo ja kohta 
 """
-def laske_max():
-    global dataRaw_arr
-    #dataCorr_arr = np.empty([1000,2])
-    global dataCorr_arr
-    global freq
-    global values
+def laske_max(datacorr_array):
     global freq_r
     global value_r
     global pointer_f
     global pointer_v
+    global freq
+    global values
     global max_value_index
 
-    AF_taulukko = pd.read_csv('AF_table.csv', delimiter=';')  # taulukko jossa antenna / cable gain
-    dataRaw_arr = data_raw.values # tälle pandas varoitus että käytä pandas.DataFrame.to_numpy .values sijaan
+    freq = datacorr_array[:,0]
+    values = datacorr_array[:,1]
 
-
-
-    dataCorr_osoittaja = 0  # käytetään osoittimena kun kasataan arvokorjattu taulukko uudestaan
-    for slot in range(350):  # tää olettaa että AF taulukossa 350 osaa. Ei kovin Python toteutus
-        freq_low = AF_taulukko.FREQ[slot] # antenna / cable gain on jaettu osiin slot joille jokaiselle lasketaan korjaus
-        freq_high = AF_taulukko.FREQ[slot+1] # tämä on slotin ylätaajuus
-        gain_tekija = AF_taulukko.dBi[slot]
-        dataCorr_arr = dataRaw_arr  #  luodaan uusi array jossa korvataan mitattu data korjatulla datalla
-        for line in dataRaw_arr:
-           if freq_low <= line[0] <= freq_high:  # line[0] viittaa taajuuteen line[1] on taasen mitattu arvo
-               print(slot)
-               print('LOW '+ str(freq_low))
-               print('line '+str(line[0]))
-               print('dBi '+str(gain_tekija))
-               print('korjattu '+ str(line[1]+gain_tekija))
-               print('HIGH '+str(freq_high))
-               print (dataCorr_osoittaja)
-               print('  ')
-               dataCorr_arr[dataCorr_osoittaja] = [line[0],line[1]+gain_tekija]
-               dataCorr_osoittaja = dataCorr_osoittaja+1
-
-
-    freq = dataCorr_arr[:,0]
-    values = dataCorr_arr[:,1]
-    dataCorr_pandas=pd.DataFrame(freq)
-    dataCorr_pandas.to_csv(tyohakemisto+"/dataCorr.txt", sep=';')
-    max_value_index = data_raw.idxmax(0)  # KORJAA OSOITTAMAAN korjattua taulukkoa
-    pointer_f = freq[max_value_index[1]]
-    pointer_v = values[max_value_index[1]]
-    freq_r  = round ( freq  [max_value_index[1]] , 2)
-    value_r = round ( values[max_value_index[1]] , 2)
+    dataRaw_temp = pd.DataFrame(values)
+    max_value_index = dataRaw_temp.idxmax(0)
+    freq_r  = np.around( freq[max_value_index], decimals=3)
+    value_r = np.around( values[max_value_index], decimals=3)
+    pointer_f = freq[max_value_index]
+    pointer_v = values[max_value_index]
 
 """
 Plot..
@@ -120,8 +93,9 @@ def piirra():
 PÄÄOHJELMA
 """
 
-hae_data()
-laske_max()
+hae_data()  # tämä välittää funktiolle datacorr datan: dataraw globaalina muuttujana
+datacorr = AF_C_correlation.AF_C_corr(data_raw)  # kutsutaan modulia AF_C_correlation
+laske_max(datacorr) # laskee signaalin max arvon ja taajuuden. Nämä määritelty globaaleiksi muuttujiksi
 piirra()
 #debug_tiedosto()
 
