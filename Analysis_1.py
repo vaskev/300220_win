@@ -76,7 +76,7 @@ def piirra():
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
-    teksti = str(freq_r)+"MHz ,"+str(value_r)+' dBi'
+    teksti = str(freq_r)+"MHz "+str(value_r)+' dBi'
     kuvaaja.annotate(teksti,
                      xy=(pointer_f,pointer_v  ),
                      xytext = (pointer_f +5 ,pointer_v +5),
@@ -89,14 +89,19 @@ def piirra():
     kuvaaja.text(0.5,-0.1,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes)
     plt.show()
 
+    polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
+    polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
+    raami.savefig(polkuhakemisto_png)
+    raami.savefig(polkuhakemisto_pdf)
+
 """
 PÄÄOHJELMA
 """
 
 hae_data()  # tämä välittää funktiolle datacorr datan: dataraw globaalina muuttujana
 datacorr = AF_C_correlation.AF_C_corr(data_raw)  # kutsutaan modulia AF_C_correlation
-laske_max(datacorr) # laskee signaalin max arvon ja taajuuden. Nämä määritelty globaaleiksi muuttujiksi
-piirra()
+laske_max(datacorr) # laskee  mm. signaalin max arvon ja taajuuden. Nämä määritelty globaaleiksi muuttujiksi
+piirra() #käyttää laske_max arvoja globaalien muuttujien kautta
 #debug_tiedosto()
 
 print('DONE')

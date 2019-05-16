@@ -28,6 +28,4 @@ def AF_C_corr(data_rawAF):
     assert isinstance(dataCorr_arr, object)  # PyCharm automaattilisäys
     return dataCorr_arr
 
-#    freq = dataCorr_arr[:,0]
-#    values = dataCorr_arr[:,1]
 
