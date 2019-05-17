@@ -1,15 +1,6 @@
-# cycler	0.10.0	0.10.0
-# kiwisolver	1.1.0	1.1.0
-# matplotlib	3.0.3	3.0.3
-# numpy	1.16.3	1.16.3
-# pandas	0.24.2	0.24.2
-# pip	10.0.1	19.1
-# pyparsing	2.4.0	2.4.0
-# python-dateutil	2.8.0	2.8.0
-# pytz	2019.1	2019.1
-# setuptools	39.1.0	41.0.1
-# six	1.12.0	1.12.0
-#
+# pandas
+# numpy
+# matplotlib
 
 # Tää ohjelma perustuu kiinteän mittaiseen (350) taulukkoon jossa antennin ja kaapelin gain on jaettu 20Mhz kaistoihin välillä 0 ...7000Mhz
 #totetus ei ole kovin Python
@@ -87,7 +78,8 @@ def piirra():
     kuvaaja.text(0.9,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.9,0.75,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.5,-0.1,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes)
-    plt.show()
+    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+
 
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')

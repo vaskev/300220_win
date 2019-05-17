@@ -2,7 +2,7 @@ import pandas as pd
 
 def AF_C_corr(data_rawAF):
 
-    AF_taulukko = pd.read_csv('AF_table.csv', delimiter=';')  # taulukko jossa antenna / cable gain
+    AF_taulukko = pd.read_csv('C:/Projektit/300220/Python/300220_analysis/AF_table.csv', delimiter=';')  # taulukko jossa antenna / cable gain
     dataRaw_arr = data_rawAF.values # tälle pandas varoitus että käytä pandas.DataFrame.to_numpy .values sijaan
 
 
