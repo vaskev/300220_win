@@ -79,8 +79,6 @@ def piirra():
     kuvaaja.text(0.9,0.75,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.5,-0.1,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes)
     #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
-
-
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)
