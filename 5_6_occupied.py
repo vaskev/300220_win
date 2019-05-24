@@ -68,37 +68,48 @@ def piirra():
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
-    teksti = str(freq_r)+"MHz "+str(value_r)+' dBm'
-    kuvaaja.annotate(teksti,
-                     xy=(pointer_f,pointer_v  ),
-                     xytext = (pointer_f +0.1 ,pointer_v +0.1),
-                     arrowprops=dict(arrowstyle="->",connectionstyle="arc,angleA=0,armA=10,rad=0")
-                     )
+    kuvaaja.plot([868,869],[-80,-30])
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
-    kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
-    kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
+    #kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
+    #kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)
     raami.savefig(polkuhakemisto_pdf)
 
-def laske_mW():
-    x = dBm_mW.dBm_to_mW(-1)
-    print(x)
+def laske_occ_rajat(datacorr_array2):
 
+    global values_mW_int
+    values_temp = datacorr_array2[:,1]
+    values_mW_plot =np.array(dBm_mW.dBm_to_mW(values_temp)*100000)
+    values_mW = np.array(dBm_mW.dBm_to_mW(values_temp))
+    values_mW_int=values_mW_plot.astype(int)
+    value_max = values_mW[max_value_index]
+    power_total = values_mW.sum()
+    power_99= power_total*0.99
 
-"""
+    power_cum = value_max
+    cnt_loop = 0
+
+    while power_cum < power_99:
+        occ_osoitin = max_value_index+cnt_loop
+        power_cum = power_cum+values_mW[occ_osoitin]
+
+    print(value_max)
+    print(power_total)
+    print('99 arvo='+ str(power_99))
+    print(power_cum)
+    print('ooc_osoitin= '+str(occ_osoitin[0]))
+    """
 PÄÄOHJELMA
 """
 
 hae_data()  # tämä välittää funktiolle datacorr datan: dataraw globaalina muuttujana
 datacorr = AF_C_correlation.AF_C_corr(data_raw)  # kutsutaan modulia AF_C_correlation
 laske_max(datacorr) # laskee  mm. signaalin max arvon ja taajuuden. Nämä määritelty globaaleiksi muuttujiksi
-#laske_mW # muuttaa dBm taulukon mW/Hz
+laske_occ_rajat(datacorr) # PÄIVITÄ
 piirra() #käyttää laske_max arvoja globaalien muuttujien kautta
-#debug_tiedosto()
-
 print('DONE')
