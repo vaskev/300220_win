@@ -10,6 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import AF_C_correlation
 import numpy as np
+import dBm_mW
 
 tyohakemisto = 'c:/300220_data/'
 
@@ -84,6 +85,11 @@ def piirra():
     raami.savefig(polkuhakemisto_png)
     raami.savefig(polkuhakemisto_pdf)
 
+def laske_mW():
+    x = dBm_mW.dBm_to_mW(-1)
+    print(x)
+
+
 """
 PÄÄOHJELMA
 """
@@ -91,6 +97,7 @@ PÄÄOHJELMA
 hae_data()  # tämä välittää funktiolle datacorr datan: dataraw globaalina muuttujana
 datacorr = AF_C_correlation.AF_C_corr(data_raw)  # kutsutaan modulia AF_C_correlation
 laske_max(datacorr) # laskee  mm. signaalin max arvon ja taajuuden. Nämä määritelty globaaleiksi muuttujiksi
+#laske_mW # muuttaa dBm taulukon mW/Hz
 piirra() #käyttää laske_max arvoja globaalien muuttujien kautta
 #debug_tiedosto()
 
