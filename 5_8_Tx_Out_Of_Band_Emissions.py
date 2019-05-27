@@ -69,6 +69,14 @@ def piirra():
     kuvaaja.plot(freq,values)
 
 
+    x_5_arvot= rajat.loc[:'5_20','freq']
+    y_5_arvot=rajat.loc[:'5_20','dBm']
+    kuvaaja.plot(x_5_arvot,y_5_arvot,'r') # 300220-1 Figure 5
+
+    kuvaaja.plot([rajat.loc['6_10','freq'],rajat.loc['6_11','freq']],
+                 [rajat.loc['6_10','dBm' ],rajat.loc['6_11','dBm' ]],'b') # 300220-1 Figure 6
+    kuvaaja.plot([rajat.loc['6_21','freq'],rajat.loc['6_20','freq']],
+                 [rajat.loc['6_21','dBm' ],rajat.loc['6_20','dBm' ]],'b') # 300220-1 Figure 6
 
     teksti = str(freq_r)+"MHz "+str(value_r)+' dBm'
     #kuvaaja.annotate(teksti,
@@ -91,36 +99,61 @@ def piirra():
 def laske_rajat():
     global rajat
 
-    rajat_rakenne_init = { 'freq':[868.100,868.100,868.100,868.100,868.100,868.100,868.100,868.100,868.100,868.100,
-                                   868.100,868.100,868.100,868.100],
-                           'dBm':[-30,-40,-40,-30,-40,-30,-20,-20,-30,-40,-40,-40,-40,-40]}
+    rajat_rakenne_init = { 'freq':[1.001,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],   # Python hauskaa 1.001 tai muuten taulukko tyyppiä int
+                           'dBm':[-40.001,-40,-30,-30,-40,-40,-20,-20,-30,-40,-40,-30,-20,-20,-40,-40,-40,-40]}
 
-    rajat=pd.DataFrame(rajat_rakenne_init,index=['5_11','5_12','5_22','5_21','6_11','6_12','6_13','6_23','6_22','6_21',
+    rajat=pd.DataFrame(rajat_rakenne_init,index=['5_10','5_11','5_12','5_22','5_21','5_20',
+                                                 '6_10','6_11','6_12','6_13','6_23','6_22','6_21','6_20',
                                                  'OCW','fc','F_low_OFB','F_high_OFB'])
-    rajat.to_csv(tyohakemisto + "/rajat", sep=';')
 
     OCW = float(meas_info.TEKSTI[7])*0.001   # muunnos kHz --> MHz Operation Channel Width
     fc = (pointer_f[0])  # fc =keskitaajuus
     F_low_OFB = fc - OCW / 2   # keskitaajuus - OCW /2
     F_high_OFB = fc + OCW / 2   # keskitaajuus + OCW /2
 
+# 300220-1 Figure 5 Lasketaan taajuusalueiden reunapisteiden apuarvot
     rajat.at['OCW', 'freq'] = OCW
     rajat.at['fc', 'freq'] = fc
     rajat.at['F_low_OFB', 'freq'] = F_low_OFB
     rajat.at['F_high_OFB', 'freq'] = F_high_OFB
 
+#300220-1 Figure 5 Lasketaan taajuusalueiden reunapisteiden arvot
     rajat.at['5_11', 'freq'] = fc - 2.5 * OCW
     rajat.at['5_21', 'freq'] = fc + 2.5 * OCW
     rajat.at['5_12', 'freq'] = fc - 0.5 * OCW
     rajat.at['5_22', 'freq'] = fc + 0.5 * OCW
+    rajat.at['5_10', 'freq'] = freq[0]
+    rajat.at['5_20', 'freq'] = freq[556]
 
+# 300220-1 Figure 5 Asetaan taajuusalueiden reunapisteiden dBm arvot
+    rajat.at['5_11', 'dBm'] = -36
+    rajat.at['5_21', 'dBm'] = -36
+    rajat.at['5_12', 'dBm'] = 0
+    rajat.at['5_22', 'dBm'] = 0
+    rajat.at['5_10', 'dBm'] = -36
+    rajat.at['5_20', 'dBm'] = -36
+
+# 300220-1 Figure 6 Asetaan taajuusalueiden reunapisteiden arvot
     rajat.at['6_11', 'freq'] = F_low_OFB -0.4  # 0.4 = 400kHz
     rajat.at['6_12', 'freq'] = F_low_OFB - 0.2  # 0.4 = 200kHz
     rajat.at['6_13', 'freq'] = F_low_OFB
-
     rajat.at['6_21', 'freq'] = F_high_OFB +0.4  # 0.4 = 400kHz
-    rajat.at['6_22', 'freq'] = F_high_OFB - 0.2  # 0.4 = 200kHz
+    rajat.at['6_22', 'freq'] = F_high_OFB + 0.2  # 0.4 = 200kHz
     rajat.at['6_23', 'freq'] = F_high_OFB
+    rajat.at['6_10', 'freq'] = freq[0]
+    rajat.at['6_20', 'freq'] = freq[556]
+
+# 300220-1 Figure 6 Asetaan taajuusalueiden reunapisteiden dBm arvot
+    rajat.at['6_11', 'dBm'] = -36
+    rajat.at['6_12', 'dBm'] = -36
+    rajat.at['6_13', 'dBm'] = 0
+    rajat.at['6_21', 'dBm'] = -36
+    rajat.at['6_22', 'dBm'] = -36
+    rajat.at['6_23', 'dBm'] = 0
+    rajat.at['6_10', 'dBm'] = -36
+    rajat.at['6_20', 'dBm'] = -36
+
+
 
     rajat.to_csv(tyohakemisto + "/5_8_OutOfBandrajat.txt", sep=';')
 
