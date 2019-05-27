@@ -10,7 +10,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import AF_C_correlation
 import numpy as np
-import dBm_mW
 
 tyohakemisto = 'c:/300220_data/'
 
@@ -69,56 +68,71 @@ def piirra():
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
 
-    alareuna = values.min()
-    ylareuna = values.max()
-    occ_oikea = freq[occ_osoitin_oikea]
-    occ_vasen = freq[occ_osoitin_vasen]
 
-    occ_kHz = (occ_oikea - occ_vasen)*1000
 
-    kuvaaja.plot([occ_oikea,occ_oikea],[alareuna,ylareuna], 'r')
-    kuvaaja.plot([occ_vasen, occ_vasen], [alareuna, ylareuna], 'r')
-
+    teksti = str(freq_r)+"MHz "+str(value_r)+' dBm'
+    #kuvaaja.annotate(teksti,
+     #                xy=(pointer_f,pointer_v  ),
+      #               xytext = (pointer_f +0.1 ,pointer_v +0.1),
+       #              arrowprops=dict(arrowstyle="->",connectionstyle="arc,angleA=0,armA=10,rad=0")
+        #             )
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
-    kuvaaja.text(0.8,0.85,('OBW(kHz): '+ str( occ_kHz)),ha='center', va='center', transform=kuvaaja.transAxes)
-    kuvaaja.text(0.8,0.80,('Center f(MHz):'+str(pointer_f[0])),ha='center', va='center', transform=kuvaaja.transAxes)
+    kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
+    kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)
     raami.savefig(polkuhakemisto_pdf)
 
-def laske_occ_rajat(datacorr_array2):
 
-    global values_mW_int
-    global occ_osoitin_oikea
-    global occ_osoitin_vasen
+def laske_rajat():
+    global rajat
 
-    values_temp = datacorr_array2[:,1]
-    values_mW_plot =np.array(dBm_mW.dBm_to_mW(values_temp)*100000)
-    values_mW = np.array(dBm_mW.dBm_to_mW(values_temp))
-    values_mW_int=values_mW_plot.astype(int)
-    value_max = values_mW[max_value_index]
-    power_total = values_mW.sum()
-    power_99= power_total*0.99/2 #  99% tehosta. Koska jäljempänä tarkastellaan tehon puolikasta jaetaan kahdella
-    power_cum = 0
-    cnt_loop = 0
+    rajat_rakenne_init = { 'freq':[868.100,868.100,868.100,868.100,868.100,868.100,868.100,868.100,868.100,868.100,
+                                   868.100,868.100,868.100,868.100],
+                           'dBm':[-30,-40,-40,-30,-40,-30,-20,-20,-30,-40,-40,-40,-40,-40]}
 
-    while power_cum < power_99:
-        occ_osoitin_oikea = max_value_index[0]+cnt_loop
-        cnt_loop = cnt_loop+1
-        power_cum = power_cum+values_mW[occ_osoitin_oikea]
+    rajat=pd.DataFrame(rajat_rakenne_init,index=['5_11','5_12','5_22','5_21','6_11','6_12','6_13','6_23','6_22','6_21',
+                                                 'OCW','fc','F_low_OFB','F_high_OFB'])
+    rajat.to_csv(tyohakemisto + "/rajat", sep=';')
 
-    occ_osoitin_vasen = max_value_index[0]-cnt_loop
-    """
+    OCW = float(meas_info.TEKSTI[7])*0.001   # muunnos kHz --> MHz Operation Channel Width
+    fc = (pointer_f[0])  # fc =keskitaajuus
+    F_low_OFB = fc - OCW / 2   # keskitaajuus - OCW /2
+    F_high_OFB = fc + OCW / 2   # keskitaajuus + OCW /2
+
+    rajat.at['OCW', 'freq'] = OCW
+    rajat.at['fc', 'freq'] = fc
+    rajat.at['F_low_OFB', 'freq'] = F_low_OFB
+    rajat.at['F_high_OFB', 'freq'] = F_high_OFB
+
+    rajat.at['5_11', 'freq'] = fc - 2.5 * OCW
+    rajat.at['5_21', 'freq'] = fc + 2.5 * OCW
+    rajat.at['5_12', 'freq'] = fc - 0.5 * OCW
+    rajat.at['5_22', 'freq'] = fc + 0.5 * OCW
+
+    rajat.at['6_11', 'freq'] = F_low_OFB -0.4  # 0.4 = 400kHz
+    rajat.at['6_12', 'freq'] = F_low_OFB - 0.2  # 0.4 = 200kHz
+    rajat.at['6_13', 'freq'] = F_low_OFB
+
+    rajat.at['6_21', 'freq'] = F_high_OFB +0.4  # 0.4 = 400kHz
+    rajat.at['6_22', 'freq'] = F_high_OFB - 0.2  # 0.4 = 200kHz
+    rajat.at['6_23', 'freq'] = F_high_OFB
+
+    rajat.to_csv(tyohakemisto + "/5_8_OutOfBandrajat.txt", sep=';')
+
+"""
 PÄÄOHJELMA
 """
 
 hae_data()  # tämä välittää funktiolle datacorr datan: dataraw globaalina muuttujana
 datacorr = AF_C_correlation.AF_C_corr(data_raw)  # kutsutaan modulia AF_C_correlation
 laske_max(datacorr) # laskee  mm. signaalin max arvon ja taajuuden. Nämä määritelty globaaleiksi muuttujiksi
-laske_occ_rajat(datacorr) # PÄIVITÄ
+laske_rajat()#
 piirra() #käyttää laske_max arvoja globaalien muuttujien kautta
+#debug_tiedosto()
+
 print('DONE')
