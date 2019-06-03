@@ -66,8 +66,15 @@ def piirra():
 
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
-    kuvaaja.plot(freq,values)
 
+    freq_to_5_12 = freq[freq < rajat.loc['5_12','freq']]  # rajataan mukaan vain ne datapisteet jotka ovat OC:n ulkopuolella
+    values_to_5_12 = values[freq < rajat.loc['5_12','freq']]
+    freq_from_5_22 = freq[freq > rajat.loc['5_22','freq']]
+    values_from_5_22 = values[freq > rajat.loc['5_22','freq']]
+
+
+    kuvaaja.plot(freq_to_5_12,values_to_5_12,'b')
+    kuvaaja.plot(freq_from_5_22, values_from_5_22, 'b')
 
     x_5_arvot= rajat.loc[:'5_20','freq']
     y_5_arvot=rajat.loc[:'5_20','dBm']
@@ -89,7 +96,7 @@ def piirra():
     kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)

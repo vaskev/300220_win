@@ -70,8 +70,8 @@ def piirra():
     teksti = str(freq_r)+"MHz "+str(value_r)+' dBm'
     kuvaaja.annotate(teksti,
                      xy=(pointer_f,pointer_v  ),
-                     xytext = (pointer_f +0.1 ,pointer_v +0.1),
-                     arrowprops=dict(arrowstyle="->",connectionstyle="arc,angleA=0,armA=10,rad=0")
+                     xytext = (pointer_f+0.01 ,pointer_v+0.01),
+                     arrowprops=dict(arrowstyle="->",connectionstyle="arc,angleA=45,armA=4,rad=0")
                      )
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
