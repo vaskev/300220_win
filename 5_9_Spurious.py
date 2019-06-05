@@ -75,6 +75,20 @@ def piirra():
     kuvaaja.plot(freq_to_7_15, values_to_7_15, 'b')
     kuvaaja.plot(freq_from_7_25, values_from_7_25, 'b')
 
+    #alin "hammas"
+    kuvaaja.plot( [rajat.loc['7_10','freq'], rajat.loc['47-','freq'] ] ,
+                  [rajat.loc['7_10','dBm_tx'], rajat.loc['47-','dBm_tx'] ]
+                  ,'r')
+
+    # 47 ...74 MHz
+    kuvaaja.plot([rajat.loc['47+', 'freq'], rajat.loc['74-', 'freq']],
+                 [rajat.loc['47+', 'dBm_tx'], rajat.loc['74-', 'dBm_tx']]
+                 , 'r')
+
+    # 74 ...87.5 MHz
+    kuvaaja.plot([rajat.loc['74+', 'freq'], rajat.loc['87.5-', 'freq']],
+                 [rajat.loc['74+', 'dBm_tx'], rajat.loc['87.5-', 'dBm_tx']]
+                 , 'r')
 
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
@@ -163,7 +177,7 @@ def laske_rajat():
     #rajat.at['5_20', 'freq'] = freq[556] #datan viimeinen piste
 
 # 300220-1 Figure 7 Asetaan taajuusalueiden reunapisteiden dBm arvot Tx
-    rajat.at['7_10', 'dBm_tx'] = -54
+    rajat.at['7_10', 'dBm_tx'] = -36
     rajat.at['7_11', 'dBm_tx'] = -54
     rajat.at['7_12', 'dBm_tx'] = -54
     rajat.at['7_13', 'dBm_tx'] = -36
@@ -176,7 +190,7 @@ def laske_rajat():
     # 7_21 ei olemassa katso application note
     rajat.at['7_20', 'dBm_tx'] = -30
 
-    rajat.at['47-', 'dBm_tx']   = -36
+    rajat.at['47-', 'dBm_tx'] = -36
     rajat.at['74-', 'dBm_tx'] = -54
     rajat.at['87.5-', 'dBm_tx'] = -36
     rajat.at['118-', 'dBm_tx'] = -54
