@@ -74,6 +74,15 @@ def piirra():
 
     kuvaaja.plot(freq_to_7_15, values_to_7_15, 'b')
     kuvaaja.plot(freq_from_7_25, values_from_7_25, 'b')
+    #kuvaaja.plot(freq,values,'c')
+
+    if meas_info.TEKSTI[9] == 1:              # valitaan käytetäänkö Rx vai tx rajoja
+                    rx_vai_tx = 'dBm_tx'
+    else:
+                    rx_vai_tx = 'dBm_rx'
+
+    print (rx_vai_tx)
+
 
     # 0.009 ... 0.150 MHz   säteilevä mittaus alaraja 25MHz jossa mitataan RBW = 10kHz
     kuvaaja.plot( [rajat.loc['7_10','freq'], rajat.loc['47-','freq'] ] ,
@@ -183,7 +192,7 @@ def laske_rajat():
 
     OCW = float(meas_info.TEKSTI[7])*0.001   # muunnos kHz --> MHz Operation Channel Width
     #fc = (pointer_f[0])  # fc =keskitaajuus
-    fc = float(meas_info.TEKSTI[9]) # Spurious käyttää keskitaajuutena declared arvoa. EI datasta laskettua
+    fc = float(meas_info.TEKSTI[10]) # Spurious käyttää keskitaajuutena declared arvoa. EI datasta laskettua
 
     print(fc)
 
@@ -276,6 +285,39 @@ def laske_rajat():
     rajat.at['230+', 'dBm_tx'] = -36
     rajat.at['470+', 'dBm_tx'] = -54
     rajat.at['790+', 'dBm_tx'] = -36
+
+    # 300220-1 Figure 7 Asetaan taajuusalueiden reunapisteiden dBm arvot Rx
+
+    rajat.at['7_10', 'dBm_rx'] = -57
+    rajat.at['7_11', 'dBm_rx'] = -57
+    rajat.at['7_12', 'dBm_rx'] = -57
+    rajat.at['7_13', 'dBm_rx'] = -57
+    rajat.at['7_14', 'dBm_rx'] = -57
+    rajat.at['7_15', 'dBm_rx'] = -57
+    rajat.at['7_25', 'dBm_rx'] = -57
+    rajat.at['7_24', 'dBm_rx'] = -57
+    rajat.at['7_23', 'dBm_rx'] = -57
+    rajat.at['7_22', 'dBm_rx'] = -57
+    # 7_21 ei olemassa katso application note
+    rajat.at['7_20', 'dBm_rx'] = -57
+
+    rajat.at['47-', 'dBm_rx'] = -57
+    rajat.at['74-', 'dBm_rx'] = -57
+    rajat.at['87.5-', 'dBm_rx'] = -57
+    rajat.at['118-', 'dBm_rx'] = -57
+    rajat.at['174-', 'dBm_rx'] = -57
+    rajat.at['230-', 'dBm_rx'] = -57
+    rajat.at['470-', 'dBm_rx'] = -57
+    rajat.at['790-', 'dBm_rx'] = -57
+
+    rajat.at['47+', 'dBm_rx'] = -57
+    rajat.at['74+', 'dBm_rx'] = -57
+    rajat.at['87.5+', 'dBm_rx'] = -57
+    rajat.at['118+', 'dBm_rx'] = -57
+    rajat.at['174+', 'dBm_rx'] = -57
+    rajat.at['230+', 'dBm_rx'] = -57
+    rajat.at['470+', 'dBm_rx'] = -57
+    rajat.at['790+', 'dBm_rx'] = -57
 
     rajat.to_csv(tyohakemisto + "/5_9_SpuriousRajat.txt", sep=';')
 
