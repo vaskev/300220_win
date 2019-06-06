@@ -75,7 +75,7 @@ def piirra():
     kuvaaja.plot(freq_to_7_15, values_to_7_15, 'b')
     kuvaaja.plot(freq_from_7_25, values_from_7_25, 'b')
 
-    #alin "hammas"
+    # 0.009 ... 0.150 MHz   säteilevä mittaus alaraja 25MHz jossa mitataan RBW = 10kHz
     kuvaaja.plot( [rajat.loc['7_10','freq'], rajat.loc['47-','freq'] ] ,
                   [rajat.loc['7_10','dBm_tx'], rajat.loc['47-','dBm_tx'] ]
                   ,'r')
@@ -89,6 +89,71 @@ def piirra():
     kuvaaja.plot([rajat.loc['74+', 'freq'], rajat.loc['87.5-', 'freq']],
                  [rajat.loc['74+', 'dBm_tx'], rajat.loc['87.5-', 'dBm_tx']]
                  , 'r')
+
+    # 87.5 ...118 MHz
+    kuvaaja.plot([rajat.loc['87.5+', 'freq'], rajat.loc['118-', 'freq']],
+                 [rajat.loc['87.5+', 'dBm_tx'], rajat.loc['118-', 'dBm_tx']]
+                 , 'r')
+
+    # 118 ... 174 MHz
+    kuvaaja.plot([rajat.loc['118+', 'freq'], rajat.loc['174-', 'freq']],
+                 [rajat.loc['118+', 'dBm_tx'], rajat.loc['174-', 'dBm_tx']]
+                 , 'r')
+
+    # 174 ... 230 MHz
+    kuvaaja.plot([rajat.loc['174+', 'freq'], rajat.loc['230-', 'freq']],
+                 [rajat.loc['174+', 'dBm_tx'], rajat.loc['230-', 'dBm_tx']]
+                 , 'r')
+
+    # 230 ... 470 MHz
+    kuvaaja.plot([rajat.loc['230+', 'freq'], rajat.loc['470-', 'freq']],
+                 [rajat.loc['230+', 'dBm_tx'], rajat.loc['470-', 'dBm_tx']]
+                 , 'r')
+
+    # 470 ... 790 MHz
+    kuvaaja.plot([rajat.loc['470+', 'freq'], rajat.loc['790-', 'freq']],
+                 [rajat.loc['470+', 'dBm_tx'], rajat.loc['790-', 'dBm_tx']]
+                 , 'r')
+
+
+    # 470 ... 790 MHz
+    kuvaaja.plot([rajat.loc['470+', 'freq'], rajat.loc['790-', 'freq']],
+                 [rajat.loc['470+', 'dBm_tx'], rajat.loc['790-', 'dBm_tx']]
+                 , 'r')
+
+    # 790 ... 7_13 MHz
+
+    kuvaaja.plot([rajat.loc['790+', 'freq'], rajat.loc['7_13', 'freq']],
+                 [rajat.loc['790+', 'dBm_tx'], rajat.loc['7_13', 'dBm_tx']]
+                 , 'k')
+
+
+    # 7_13 ... 7_14
+    kuvaaja.plot([rajat.loc['7_13', 'freq'], rajat.loc['7_14', 'freq']],
+                 [rajat.loc['7_13', 'dBm_tx'], rajat.loc['7_14', 'dBm_tx']]
+                 , 'k')
+
+    # 7_14 ... 7_15
+    kuvaaja.plot([rajat.loc['7_14', 'freq'], rajat.loc['7_15', 'freq']],
+                 [rajat.loc['7_14', 'dBm_tx'], rajat.loc['7_15', 'dBm_tx']]
+                 , 'k')
+
+    # 7_25 ... 7_24
+    kuvaaja.plot([rajat.loc['7_25', 'freq'], rajat.loc['7_24', 'freq']],
+                 [rajat.loc['7_25', 'dBm_tx'], rajat.loc['7_24', 'dBm_tx']]
+                 , 'k')
+
+    # 7_24 ... 7_23
+    kuvaaja.plot([rajat.loc['7_24', 'freq'], rajat.loc['7_23', 'freq']],
+                 [rajat.loc['7_24', 'dBm_tx'], rajat.loc['7_23', 'dBm_tx']]
+                 , 'k')
+
+    # 7_23 ... 7_22
+    kuvaaja.plot([rajat.loc['7_23', 'freq'], rajat.loc['7_22', 'freq']],
+                 [rajat.loc['7_23', 'dBm_tx'], rajat.loc['7_22', 'dBm_tx']]
+                 , 'k')
+
+
 
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
@@ -117,7 +182,11 @@ def laske_rajat():
                                                  'OCW','fc','F_low_OFB','F_high_OFB'])
 
     OCW = float(meas_info.TEKSTI[7])*0.001   # muunnos kHz --> MHz Operation Channel Width
-    fc = (pointer_f[0])  # fc =keskitaajuus
+    #fc = (pointer_f[0])  # fc =keskitaajuus
+    fc = float(meas_info.TEKSTI[9]) # Spurious käyttää keskitaajuutena declared arvoa. EI datasta laskettua
+
+    print(fc)
+
     F_low_OFB = fc - OCW / 2   # keskitaajuus - OCW /2
     F_high_OFB = fc + OCW / 2   # keskitaajuus + OCW /2
 
@@ -128,16 +197,16 @@ def laske_rajat():
     rajat.at['F_high_OFB', 'freq'] = F_high_OFB
 
     m = OCW * 10
-    if m > 0.5:
+    if m < 0.5:
         m = 0.5   # ehto max 500kHz
     rajat.at['m','freq'] = m
     
     n = OCW * 4
-    if n > 0.1:
+    if n < 0.1:
         n = 0.1   # ehto max 100kHz
     rajat.at['n', 'freq'] = n
     
-    p = OCW*2.5
+    p = OCW * 2.5
     rajat.at['p', 'freq'] = p
     
     
@@ -186,7 +255,7 @@ def laske_rajat():
     rajat.at['7_25', 'dBm_tx'] = -36
     rajat.at['7_24', 'dBm_tx'] = -36
     rajat.at['7_23', 'dBm_tx'] = -36
-    rajat.at['7_22', 'dBm_tx'] = -30
+    rajat.at['7_22', 'dBm_tx'] = -36
     # 7_21 ei olemassa katso application note
     rajat.at['7_20', 'dBm_tx'] = -30
 
