@@ -67,18 +67,22 @@ def piirra():
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
-    teksti = str(freq_r)+"MHz "+str(value_r)+' dBm'
-    kuvaaja.annotate(teksti,
+    teksti_1 = 'ERP = ' +str(value_r) +  'dBm'+' @ '+ str(freq_r)+ 'MHz '
+    kuvaaja.annotate(' ',
                      xy=(pointer_f,pointer_v  ),
-                     xytext = (pointer_f-2 ,pointer_v-2),
+                     xytext = (pointer_f-0.02 ,pointer_v),
                      arrowprops=dict(arrowstyle="->",connectionstyle="arc,angleA=45,armA=1,rad=0")
                      )
+
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.85,meas_info.TEKSTI[1],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+
+    kuvaaja.text(0.8, 0.6, teksti_1, ha='center', va='center', transform=kuvaaja.transAxes, color = 'r')
+
+    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)

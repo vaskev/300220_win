@@ -18,7 +18,7 @@ def AF_C_corr(data_rawAF):
            if freq_low <= line[0] <= freq_high:  # line[0] viittaa taajuuteen line[1] on taasen mitattu arvo
 
                power_tmp_dBm = line[1]
-               power_tmp_dBuV =power_tmp_dBm+107+AFC_tekija # kaava P+107dB
+               power_tmp_dBuV =power_tmp_dBm+107-AFC_tekija # kaava P+107dB
 
                tekija_1 = pow(10, (power_tmp_dBuV / 20) - 6)
                #print('1= ' + str(tekija_1))

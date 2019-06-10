@@ -55,8 +55,15 @@ def laske_max(datacorr_array):
 
     dataRaw_temp = pd.DataFrame(values)
     max_value_index = dataRaw_temp.idxmax(0)
-    freq_r  = np.round( freq[max_value_index[0]], decimals=3)
-    value_r = np.round( values[max_value_index[0]], decimals=2)
+
+
+    fc = meas_info.TEKSTI[7]  # Occupied muutos 10.6.2019 --> käytetään declared arvoa max_value_index:sinä
+    for laskuri in range(350):
+        vertailtava_taajuus= freq[laskuri]
+        if vertailtava_taajuus > float(fc): max_value_index = laskuri-1
+
+    freq_r  = np.round( freq[max_value_index], decimals=3)
+    value_r = np.round( values[max_value_index], decimals=2)
     pointer_f = freq[max_value_index]
     pointer_v = values[max_value_index]
 
@@ -78,13 +85,12 @@ def piirra():
 
     kuvaaja.plot([occ_oikea,occ_oikea],[alareuna,ylareuna], 'r')
     kuvaaja.plot([occ_vasen, occ_vasen], [alareuna, ylareuna], 'r')
-
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.85,('OBW(kHz): '+ str( occ_kHz)),ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,0.80,('Center f(MHz):'+str(pointer_f[0])),ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)
@@ -107,11 +113,11 @@ def laske_occ_rajat(datacorr_array2):
     cnt_loop = 0
 
     while power_cum < power_99:
-        occ_osoitin_oikea = max_value_index[0]+cnt_loop
+        occ_osoitin_oikea = max_value_index+cnt_loop
         cnt_loop = cnt_loop+1
         power_cum = power_cum+values_mW[occ_osoitin_oikea]
 
-    occ_osoitin_vasen = max_value_index[0]-cnt_loop
+    occ_osoitin_vasen = max_value_index-cnt_loop
     """
 PÄÄOHJELMA
 """

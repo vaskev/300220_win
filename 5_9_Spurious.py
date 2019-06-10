@@ -86,80 +86,80 @@ def piirra():
 
     # 0.009 ... 0.150 MHz   säteilevä mittaus alaraja 25MHz jossa mitataan RBW = 10kHz
     kuvaaja.plot( [rajat.loc['7_10','freq'], rajat.loc['47-','freq'] ] ,
-                  [rajat.loc['7_10','dBm_tx'], rajat.loc['47-','dBm_tx'] ]
+                  [rajat.loc['7_10',rx_vai_tx], rajat.loc['47-',rx_vai_tx] ]
                   ,'r')
 
     # 47 ...74 MHz
     kuvaaja.plot([rajat.loc['47+', 'freq'], rajat.loc['74-', 'freq']],
-                 [rajat.loc['47+', 'dBm_tx'], rajat.loc['74-', 'dBm_tx']]
+                 [rajat.loc['47+', rx_vai_tx], rajat.loc['74-', rx_vai_tx]]
                  , 'r')
 
     # 74 ...87.5 MHz
     kuvaaja.plot([rajat.loc['74+', 'freq'], rajat.loc['87.5-', 'freq']],
-                 [rajat.loc['74+', 'dBm_tx'], rajat.loc['87.5-', 'dBm_tx']]
+                 [rajat.loc['74+', rx_vai_tx], rajat.loc['87.5-', rx_vai_tx]]
                  , 'r')
 
     # 87.5 ...118 MHz
     kuvaaja.plot([rajat.loc['87.5+', 'freq'], rajat.loc['118-', 'freq']],
-                 [rajat.loc['87.5+', 'dBm_tx'], rajat.loc['118-', 'dBm_tx']]
+                 [rajat.loc['87.5+', rx_vai_tx], rajat.loc['118-', rx_vai_tx]]
                  , 'r')
 
     # 118 ... 174 MHz
     kuvaaja.plot([rajat.loc['118+', 'freq'], rajat.loc['174-', 'freq']],
-                 [rajat.loc['118+', 'dBm_tx'], rajat.loc['174-', 'dBm_tx']]
+                 [rajat.loc['118+', rx_vai_tx], rajat.loc['174-', rx_vai_tx]]
                  , 'r')
 
     # 174 ... 230 MHz
     kuvaaja.plot([rajat.loc['174+', 'freq'], rajat.loc['230-', 'freq']],
-                 [rajat.loc['174+', 'dBm_tx'], rajat.loc['230-', 'dBm_tx']]
+                 [rajat.loc['174+', rx_vai_tx], rajat.loc['230-', rx_vai_tx]]
                  , 'r')
 
     # 230 ... 470 MHz
     kuvaaja.plot([rajat.loc['230+', 'freq'], rajat.loc['470-', 'freq']],
-                 [rajat.loc['230+', 'dBm_tx'], rajat.loc['470-', 'dBm_tx']]
+                 [rajat.loc['230+', rx_vai_tx], rajat.loc['470-', rx_vai_tx]]
                  , 'r')
 
     # 470 ... 790 MHz
     kuvaaja.plot([rajat.loc['470+', 'freq'], rajat.loc['790-', 'freq']],
-                 [rajat.loc['470+', 'dBm_tx'], rajat.loc['790-', 'dBm_tx']]
+                 [rajat.loc['470+', rx_vai_tx], rajat.loc['790-', rx_vai_tx]]
                  , 'r')
 
 
     # 470 ... 790 MHz
     kuvaaja.plot([rajat.loc['470+', 'freq'], rajat.loc['790-', 'freq']],
-                 [rajat.loc['470+', 'dBm_tx'], rajat.loc['790-', 'dBm_tx']]
+                 [rajat.loc['470+', rx_vai_tx], rajat.loc['790-', rx_vai_tx]]
                  , 'r')
 
     # 790 ... 7_13 MHz
 
     kuvaaja.plot([rajat.loc['790+', 'freq'], rajat.loc['7_13', 'freq']],
-                 [rajat.loc['790+', 'dBm_tx'], rajat.loc['7_13', 'dBm_tx']]
+                 [rajat.loc['790+', rx_vai_tx], rajat.loc['7_13', rx_vai_tx]]
                  , 'k')
 
 
     # 7_13 ... 7_14
     kuvaaja.plot([rajat.loc['7_13', 'freq'], rajat.loc['7_14', 'freq']],
-                 [rajat.loc['7_13', 'dBm_tx'], rajat.loc['7_14', 'dBm_tx']]
+                 [rajat.loc['7_13', rx_vai_tx], rajat.loc['7_14', rx_vai_tx]]
                  , 'k')
 
     # 7_14 ... 7_15
     kuvaaja.plot([rajat.loc['7_14', 'freq'], rajat.loc['7_15', 'freq']],
-                 [rajat.loc['7_14', 'dBm_tx'], rajat.loc['7_15', 'dBm_tx']]
+                 [rajat.loc['7_14', rx_vai_tx], rajat.loc['7_15', rx_vai_tx]]
                  , 'k')
 
     # 7_25 ... 7_24
     kuvaaja.plot([rajat.loc['7_25', 'freq'], rajat.loc['7_24', 'freq']],
-                 [rajat.loc['7_25', 'dBm_tx'], rajat.loc['7_24', 'dBm_tx']]
+                 [rajat.loc['7_25', rx_vai_tx], rajat.loc['7_24', rx_vai_tx]]
                  , 'k')
 
     # 7_24 ... 7_23
     kuvaaja.plot([rajat.loc['7_24', 'freq'], rajat.loc['7_23', 'freq']],
-                 [rajat.loc['7_24', 'dBm_tx'], rajat.loc['7_23', 'dBm_tx']]
+                 [rajat.loc['7_24', rx_vai_tx], rajat.loc['7_23', rx_vai_tx]]
                  , 'k')
 
     # 7_23 ... 7_22
     kuvaaja.plot([rajat.loc['7_23', 'freq'], rajat.loc['7_22', 'freq']],
-                 [rajat.loc['7_23', 'dBm_tx'], rajat.loc['7_22', 'dBm_tx']]
+                 [rajat.loc['7_23', rx_vai_tx], rajat.loc['7_22', rx_vai_tx]]
                  , 'k')
 
 
@@ -169,7 +169,7 @@ def piirra():
     kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)
