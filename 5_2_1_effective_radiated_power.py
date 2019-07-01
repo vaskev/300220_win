@@ -67,6 +67,8 @@ def piirra():
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
+    kuvaaja.set_ylabel('dBm @3m')
+
     teksti_1 = 'ERP = ' +str(value_r) +  'dBm'+' @ '+ str(freq_r)+ 'MHz '
     kuvaaja.annotate(' ',
                      xy=(pointer_f,pointer_v  ),

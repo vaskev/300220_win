@@ -53,19 +53,15 @@ def laske_max(datacorr_array):
     freq = datacorr_array[:,0]
     values = datacorr_array[:,1]
 
-    dataRaw_temp = pd.DataFrame(values)
-    max_value_index = dataRaw_temp.idxmax(0)
-
+    #dataRaw_temp = pd.DataFrame(values) # Occupied muutos 10.6.2019 --> käytetään declared arvoa max_value_index:sinä
+    #max_value_index = dataRaw_temp.idxmax(0) # Occupied muutos 10.6.2019 --> käytetään declared arvoa max_value_index:sinä
 
     fc = meas_info.TEKSTI[7]  # Occupied muutos 10.6.2019 --> käytetään declared arvoa max_value_index:sinä
-    for laskuri in range(350):
+    for laskuri in range(550):  # haetaan ensimmäisen taajuuspisteen indeksi joka suurempi kuin declared value taajuus
         vertailtava_taajuus= freq[laskuri]
-        if vertailtava_taajuus > float(fc): max_value_index = laskuri-1
-
-    freq_r  = np.round( freq[max_value_index], decimals=3)
-    value_r = np.round( values[max_value_index], decimals=2)
-    pointer_f = freq[max_value_index]
-    pointer_v = values[max_value_index]
+        if vertailtava_taajuus > float(fc):
+                max_value_index = laskuri
+                break
 
 """
 Plot..
@@ -75,7 +71,7 @@ def piirra():
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
     kuvaaja.plot(freq,values)
-
+    kuvaaja.set_ylabel('dBm @3m')
     alareuna = values.min()
     ylareuna = values.max()
     occ_oikea = freq[occ_osoitin_oikea]
@@ -86,11 +82,18 @@ def piirra():
     kuvaaja.plot([occ_oikea,occ_oikea],[alareuna,ylareuna], 'r')
     kuvaaja.plot([occ_vasen, occ_vasen], [alareuna, ylareuna], 'r')
     kuvaaja.text(0.8,0.90,meas_info.TEKSTI[0],ha='center', va='center', transform=kuvaaja.transAxes)
-    kuvaaja.text(0.8,0.85,('OBW(kHz): '+ str( occ_kHz)),ha='center', va='center', transform=kuvaaja.transAxes)
-    kuvaaja.text(0.8,0.80,('Center f(MHz):'+str(pointer_f[0])),ha='center', va='center', transform=kuvaaja.transAxes)
+    kuvaaja.text(0.8,0.85,('OBW(kHz): '+ str( "%.4f" % occ_kHz)),ha='center', va='center', transform=kuvaaja.transAxes)
+    kuvaaja.text(0.8,0.80,('Center f(MHz):'+str("%.4f" % freq[max_value_index])),
+                 ha='center', va='center', transform=kuvaaja.transAxes)   # long formatoitu 4 merkin pituuteen
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+
+    kuvaaja.text(0.8, 0.75, occ_oikea, ha='center', va='center', transform=kuvaaja.transAxes)
+    kuvaaja.text(0.8, 0.70, occ_vasen, ha='center', va='center', transform=kuvaaja.transAxes)
+
+
+
+    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)

@@ -66,102 +66,12 @@ def piirra():
 
     raami = plt.figure()
     kuvaaja = raami.add_subplot(1,1,1)
-    kuvaaja.set_ylabel('dBm @3m')
 
-    freq_to_7_15 = freq[freq < rajat.loc['7_15','freq']]  # rajataan mukaan vain ne datapisteet jotka ovat OC:n ulkopuolella
-    values_to_7_15 = values[freq < rajat.loc['7_15','freq']]
-    freq_from_7_25 = freq[freq > rajat.loc['7_25','freq']]
-    values_from_7_25 = values[freq > rajat.loc['7_25','freq']]
+    kuvaaja.plot(freq,values)
 
-    amp = 0
-    if meas_info.TEKSTI[11] == '100':  amp = 25
-
-    kuvaaja.plot(freq_to_7_15, values_to_7_15-amp, 'b')
-    kuvaaja.plot(freq_from_7_25, values_from_7_25-amp, 'b')
-    #kuvaaja.plot(freq,values,'c')
-
-    if meas_info.TEKSTI[9] == '1':              # valitaan käytetäänkö Rx vai tx rajoja
-                    rx_vai_tx = 'dBm_tx'
-    else:
-                    rx_vai_tx = 'dBm_rx'
-
-
-    # 0.009 ... 0.150 MHz   säteilevä mittaus alaraja 25MHz jossa mitataan RBW = 10kHz
-    kuvaaja.plot( [rajat.loc['7_10','freq'], rajat.loc['47-','freq'] ] ,
-                  [rajat.loc['7_10',rx_vai_tx], rajat.loc['47-',rx_vai_tx] ]
-                  ,'r')
-
-    # 47 ...74 MHz
-    kuvaaja.plot([rajat.loc['47+', 'freq'], rajat.loc['74-', 'freq']],
-                 [rajat.loc['47+', rx_vai_tx], rajat.loc['74-', rx_vai_tx]]
-                 , 'r')
-
-    # 74 ...87.5 MHz
-    kuvaaja.plot([rajat.loc['74+', 'freq'], rajat.loc['87.5-', 'freq']],
-                 [rajat.loc['74+', rx_vai_tx], rajat.loc['87.5-', rx_vai_tx]]
-                 , 'r')
-
-    # 87.5 ...118 MHz
-    kuvaaja.plot([rajat.loc['87.5+', 'freq'], rajat.loc['118-', 'freq']],
-                 [rajat.loc['87.5+', rx_vai_tx], rajat.loc['118-', rx_vai_tx]]
-                 , 'r')
-
-    # 118 ... 174 MHz
-    kuvaaja.plot([rajat.loc['118+', 'freq'], rajat.loc['174-', 'freq']],
-                 [rajat.loc['118+', rx_vai_tx], rajat.loc['174-', rx_vai_tx]]
-                 , 'r')
-
-    # 174 ... 230 MHz
-    kuvaaja.plot([rajat.loc['174+', 'freq'], rajat.loc['230-', 'freq']],
-                 [rajat.loc['174+', rx_vai_tx], rajat.loc['230-', rx_vai_tx]]
-                 , 'r')
-
-    # 230 ... 470 MHz
-    kuvaaja.plot([rajat.loc['230+', 'freq'], rajat.loc['470-', 'freq']],
-                 [rajat.loc['230+', rx_vai_tx], rajat.loc['470-', rx_vai_tx]]
-                 , 'r')
-
-    # 470 ... 790 MHz
-    kuvaaja.plot([rajat.loc['470+', 'freq'], rajat.loc['790-', 'freq']],
-                 [rajat.loc['470+', rx_vai_tx], rajat.loc['790-', rx_vai_tx]]
-                 , 'r')
-
-
-    # 470 ... 790 MHz
-    kuvaaja.plot([rajat.loc['470+', 'freq'], rajat.loc['790-', 'freq']],
-                 [rajat.loc['470+', rx_vai_tx], rajat.loc['790-', rx_vai_tx]]
-                 , 'r')
-
-    # 790 ... 7_13 MHz
-
-    kuvaaja.plot([rajat.loc['790+', 'freq'], rajat.loc['7_13', 'freq']],
-                 [rajat.loc['790+', rx_vai_tx], rajat.loc['7_13', rx_vai_tx]]
-                 , 'k')
-
-
-    # 7_13 ... 7_14
-    kuvaaja.plot([rajat.loc['7_13', 'freq'], rajat.loc['7_14', 'freq']],
-                 [rajat.loc['7_13', rx_vai_tx], rajat.loc['7_14', rx_vai_tx]]
-                 , 'k')
-
-    # 7_14 ... 7_15
-    kuvaaja.plot([rajat.loc['7_14', 'freq'], rajat.loc['7_15', 'freq']],
-                 [rajat.loc['7_14', rx_vai_tx], rajat.loc['7_15', rx_vai_tx]]
-                 , 'k')
-
-    # 7_25 ... 7_24
-    kuvaaja.plot([rajat.loc['7_25', 'freq'], rajat.loc['7_24', 'freq']],
-                 [rajat.loc['7_25', rx_vai_tx], rajat.loc['7_24', rx_vai_tx]]
-                 , 'k')
-
-    # 7_24 ... 7_23
-    kuvaaja.plot([rajat.loc['7_24', 'freq'], rajat.loc['7_23', 'freq']],
-                 [rajat.loc['7_24', rx_vai_tx], rajat.loc['7_23', rx_vai_tx]]
-                 , 'k')
-
-    # 7_23 ... 7_22
-    kuvaaja.plot([rajat.loc['7_23', 'freq'], rajat.loc['7_22', 'freq']],
-                 [rajat.loc['7_23', rx_vai_tx], rajat.loc['7_22', rx_vai_tx]]
+    # 7_22 ... 7_23
+    kuvaaja.plot([rajat.loc['7_22', 'freq'], rajat.loc['7_23', 'freq']],
+                 [rajat.loc['7_23', 'dBm_tx'], rajat.loc['7_23', 'dBm_tx']]
                  , 'k')
 
 
@@ -171,7 +81,7 @@ def piirra():
     kuvaaja.text(0.8,0.80,meas_info.TEKSTI[2],ha='center', va='center', transform=kuvaaja.transAxes)
     kuvaaja.text(0.8,-0.1,meas_info.TEKSTI[3],ha='center', va='center', transform=kuvaaja.transAxes, fontweight='bold')
     kuvaaja.text(0.5,1.05,meas_info.TEKSTI[4],ha='center', va='center', transform=kuvaaja.transAxes,fontweight='bold')
-    #plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
+    plt.show()   # tätä ei kutsuta kun ajetaan LabView:stä
     polkuhakemisto_png = str(meas_info.TEKSTI[5]+meas_info.TEKSTI[6]+'.png')
     polkuhakemisto_pdf = str(meas_info.TEKSTI[5] + meas_info.TEKSTI[6] + '.pdf')
     raami.savefig(polkuhakemisto_png)
@@ -194,7 +104,10 @@ def laske_rajat():
 
     OCW = float(meas_info.TEKSTI[7])*0.001   # muunnos kHz --> MHz Operation Channel Width
     #fc = (pointer_f[0])  # fc =keskitaajuus
-    fc = float(meas_info.TEKSTI[10]) # Spurious käyttää keskitaajuutena declared arvoa. EI datasta laskettua
+    fc = float(meas_info.TEKSTI[9]) # Spurious käyttää keskitaajuutena declared arvoa. EI datasta laskettua
+
+    print(fc)
+
     F_low_OFB = fc - OCW / 2   # keskitaajuus - OCW /2
     F_high_OFB = fc + OCW / 2   # keskitaajuus + OCW /2
 
@@ -284,39 +197,6 @@ def laske_rajat():
     rajat.at['230+', 'dBm_tx'] = -36
     rajat.at['470+', 'dBm_tx'] = -54
     rajat.at['790+', 'dBm_tx'] = -36
-
-    # 300220-1 Figure 7 Asetaan taajuusalueiden reunapisteiden dBm arvot Rx
-
-    rajat.at['7_10', 'dBm_rx'] = -57
-    rajat.at['7_11', 'dBm_rx'] = -57
-    rajat.at['7_12', 'dBm_rx'] = -57
-    rajat.at['7_13', 'dBm_rx'] = -57
-    rajat.at['7_14', 'dBm_rx'] = -57
-    rajat.at['7_15', 'dBm_rx'] = -57
-    rajat.at['7_25', 'dBm_rx'] = -57
-    rajat.at['7_24', 'dBm_rx'] = -57
-    rajat.at['7_23', 'dBm_rx'] = -57
-    rajat.at['7_22', 'dBm_rx'] = -57
-    # 7_21 ei olemassa katso application note
-    rajat.at['7_20', 'dBm_rx'] = -57
-
-    rajat.at['47-', 'dBm_rx'] = -57
-    rajat.at['74-', 'dBm_rx'] = -57
-    rajat.at['87.5-', 'dBm_rx'] = -57
-    rajat.at['118-', 'dBm_rx'] = -57
-    rajat.at['174-', 'dBm_rx'] = -57
-    rajat.at['230-', 'dBm_rx'] = -57
-    rajat.at['470-', 'dBm_rx'] = -57
-    rajat.at['790-', 'dBm_rx'] = -57
-
-    rajat.at['47+', 'dBm_rx'] = -57
-    rajat.at['74+', 'dBm_rx'] = -57
-    rajat.at['87.5+', 'dBm_rx'] = -57
-    rajat.at['118+', 'dBm_rx'] = -57
-    rajat.at['174+', 'dBm_rx'] = -57
-    rajat.at['230+', 'dBm_rx'] = -57
-    rajat.at['470+', 'dBm_rx'] = -57
-    rajat.at['790+', 'dBm_rx'] = -57
 
     rajat.to_csv(tyohakemisto + "/5_9_SpuriousRajat.txt", sep=';')
 
